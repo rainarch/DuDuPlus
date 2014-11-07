@@ -1,6 +1,6 @@
-Duduplus
+Duduplus @github
 
-Please check https://github.com/rainarch/DuDuPlus and some source files can be found at http://code.google.com/p/duduplus/downloads/list.
+The release package can be obtained from http://sourceforge.net/projects/duduplus/.
 
 =DuDuPlus=
 DuDuPlus is a dependency parser for English and Chinese. 
@@ -23,7 +23,7 @@ DuDuPlus is a dependency parser for English and Chinese.
  * src: source code
  * model: trained model
  * resource: subtrees and word-clusters
- * All files can be found at: http://code.google.com/p/duduplus/downloads/list
+ * All files can be found at: http://sourceforge.net/projects/duduplus/
 
 ==Installation==
 ===Requirements===
