@@ -1,19 +1,21 @@
 Duduplus
 
-Please check http://code.google.com/p/duduplus/
+Please check https://github.com/rainarch/DuDuPlus and some source files can be found at http://code.google.com/p/duduplus/downloads/list.
 
 =DuDuPlus=
-DuDuPlus is a dependency parser for English and Chinese. It is a C++ version of [http://alaginrc.nict.go.jp/cnp/index.html CNP] written in Java. DuDuPlus is faster and requires less memory than CNP.
+DuDuPlus is a dependency parser for English and Chinese. 
 
 ==Features==
  * Open source implementation of a graph-based parser.
+ * Support training a new supervised parser, better than MSTParser.
  * Support subtree-based and cluster-based features (Chen et. al EMNLP2009).
  * Achieve the state-of-the-art performance for English and Chinese.
  * Support k-best output with scores.
  * Can support part-of-speech tagging.
 
 ==Performance Report==
- * PTB  standard data split, UAS: 93.3 (with LBFULL) vs 91.71 (2-order MSTParser)
+ * PTB  standard data split, semi-supervised, UAS: 93.3 (with LBFULL) vs 91.71 (2-order MSTParser)
+ * PTB  standard data split, supervised, UAS: 92.7 (with LBBASIC) vs 91.71 (2-order MSTParser)
  * CTB4 standard data split, UAS: 91.7 (with LBST) vs 88.18 (2-order MSTParser)
  * More detail available in our paper (Chen et. al EMNLP2009)
 
