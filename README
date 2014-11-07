@@ -1,0 +1,135 @@
+Duduplus
+
+Please check http://code.google.com/p/duduplus/
+
+=DuDuPlus=
+DuDuPlus is a dependency parser for English and Chinese. It is a C++ version of [http://alaginrc.nict.go.jp/cnp/index.html CNP] written in Java. DuDuPlus is faster and requires less memory than CNP.
+
+==Features==
+ * Open source implementation of a graph-based parser.
+ * Support subtree-based and cluster-based features (Chen et. al EMNLP2009).
+ * Achieve the state-of-the-art performance for English and Chinese.
+ * Support k-best output with scores.
+ * Can support part-of-speech tagging.
+
+==Performance Report==
+ * PTB  standard data split, UAS: 93.3 (with LBFULL) vs 91.71 (2-order MSTParser)
+ * CTB4 standard data split, UAS: 91.7 (with LBST) vs 88.18 (2-order MSTParser)
+ * More detail available in our paper (Chen et. al EMNLP2009)
+
+==Download==
+ * src: source code
+ * model: trained model
+ * resource: subtrees and word-clusters
+ * All files can be found at: http://code.google.com/p/duduplus/downloads/list
+
+==Installation==
+===Requirements===
+ * C++ compiler (gcc 4.4 or higher)
+===How to make===
+ * %tar vxzf duduplus.src.tgz
+ * %tar vxzf duduplus.model.tgz
+ * %tar vxzf duduplus.resource.tgz
+ * %cp _Models/* duduplus/_Models/
+ * %cp _Resources/* duduplus/res/
+ * %cd duduplus
+ * %aclocal
+ * %autoconf
+ * %automake --add-missing
+ * %./configure
+ * %make
+Then, DuDuPlus is available.
+==Usage (Dependency Parsing)==
+===Training and Test file formats===
+The input file should be in the [http://ifarm.nl/signll/conll/ CoNLL-2006/2007] format:
+ # ID: Token counter, starting at 1 for each new sentence.
+ # FORM: Word form or punctuation symbol.
+ # LEMMA: Lemma or stem of word form, or an underscore if not available.
+ # CPOSTAG: Coarse-grained part-of-speech tag, where the tagset depends on the language.
+ # POSTAG: Fine-grained part-of-speech tag, where the tagset depends on the language, or identical to the coarse-grained part-of-speech tag if not available.
+ # FEATS: Unordered set of syntactic and/or morphological features (depending on the particular language), separated by a vertical bar (|), or an underscore if not available.
+ # HEAD: Head of the current token, which is either a value of ID or zero (0). Note that, depending on the original treebank annotation, there may be multiple tokens with HEAD=0.
+ # DEPREL: Dependency relation to the HEAD. The set of dependency relations depends on the particular language. Note that, depending on the original treebank annotation, the dependency relation when HEAD=0 may be meaningful or simply ROOT.
+
+Here is an example.
+[http://duduplus.googlecode.com/files/conllformat.png http://duduplus.googlecode.com/files/conllformat.png]
+===Training===
+Use the toy data and DuDuPlus command:
+ 
+ %./DuDuPlus task:Parser train train-file:toydata/en.toy.train model-name:_Models/ToyModel.en feat-file:tmp/feat.dp.en order:1 lang:en runtype:LBBASIC
+
+A model named ToyModel.en is available in the folder: _Models.
+
+===Test===
+Use the toy data and the above trained model:
+
+ %./DuDuPlus task:Parser model-name:_Models/ToyModel.en test test-file:toydata/en.test.gold output-file:tmp/test.out order:1 lang:en runtype:LBBASIC
+
+ % perl binFiles/EvalCoNLL.pl  toydata/en.test.gold tmp/test.out
+
+If everything goes well, the UAS accuracy will be 81.73.
+
+==Usage (POS Tagging)==
+===Training and Test file formats===
+For training, the input file should be in the CoNLL-like format:
+ # ID: Token counter, starting at 1 for each new sentence.
+ # FORM: Word form or punctuation symbol.
+ # LEMMA: Lemma or stem of word form, or an underscore if not available.
+ # POSTAG: Fine-grained part-of-speech tag, where the tagset depends on the language, or identical to the coarse-grained part-of-speech tag if not available.
+
+===Training===
+
+ %./DuDuPlus task:Tagger train train-file:toydata/en.toy.train posmodel-name:_Models/ToyModel.POS.en feat-file:tmp/feat.pos.en lang:en
+
+===Test===
+
+ * If the input is raw sentences,  
+ %./DuDuPlus task:Tagger test posmodel-name:_Models/ToyModel.POS.en test-file:toydata/en.test.rawline output-file:tmp/test.out format:SENT lang:en 
+
+ * If the input is in CoNLL-foramt, 
+ %./DuDuPlus task:Tagger test posmodel-name:_Models/ToyModel.POS.en test-file:toydata/en.test.gold output-file:tmp/test.out format:CONLL lang:en
+
+ * Evaluation
+ %perl binFiles/EvalPOS.pl tmp/test.out toydata/en.toy.train
+ 
+If everything goes well, the accuracy will be 91.75.
+
+==Usage (Pipe: Tagging and Parsing)==
+
+===Test (Now, only work for English)===
+ * If the input is raw sentences,  
+ %./DuDuPlus task:TagParser test model-name:_Models/ToyModel.en posmodel-name:_Models/ToyModel.POS.en test-file:toydata/en.test.gold output-file:tmp/test.out format:SENT lang:en order:1 runtype:LBBASIC 
+
+ * If the input is in CoNLL-foramt, 
+ %./DuDuPlus task:TagParser test model-name:_Models/ToyModel.en posmodel-name:_Models/ToyModel.POS.en test-file:toydata/en.test.gold output-file:tmp/test.out format:CONLL lang:en order:1 runtype:LBBASIC
+
+ % perl binFiles/EvalPOSDP.pl toydata/en.test.gold tmp/test.out
+
+If everything goes well, the accuracy for tagging will be 91.75 and the UAS for parsing will be 76.37.
+
+==How to Use the trained Models==
+Download the trained models from the project site.
+
+ * TagParser (English, follows the PTB definitions)
+ % ./DuDuPlus task:TagParser test model-name:_Models/DPModel.EN.O2LBFULL posmodel-name:_Models/POSModel.EN test-file:toydata/en.test.gold output-file:tmp/test.out format:CONLL lang:en order:2 runtype:LBFULL
+
+ * Parser (Chinese, follows the CTB definitions)
+ %  ./DuDuPlus task:Parser model-name:_Models/DPModel.CN.O2LBST test test-file:toydata/cn.test.conll output-file:tmp/test.out.cn order:2 lang:cn runtype:LBST
+
+Again, if everything goes well, the score for LBFULL is 94.24 (English), the score for LBST is 91.77(Chinese). 
+
+==Further Help==
+
+%./DuDuPlus help
+
+==Related Publications==
+If you would like to acknowledge this tool, please cite one of the following papers:
+ * Wenliang Chen, Junchi Kazama, Kiyotaka Uchimoto, and Kentaro Torisawa. Improving Dependency Parsing with Subtrees from Auto-Parsed Data, Conference on Empirical Methods in Natural Language Processing(EMNLP2009), pp570-579, Singapore, August 2-7, 2009.
+
+ * Wenliang Chen, Jun'ichi Kazama,  Kiyotaka Uchimoto, and Kentaro Torisawa. Exploiting Subtrees in Auto-Parsed Data to Improve Dependency Parsing, Computational Intelligence Journal, Vol. 28, No. 3, pp426-451, Auguest 2012.[J] Available at (http://dx.doi.org/10.1111/j.1467-8640.2012.00451.x or http://onlinelibrary.wiley.com/doi/10.1111/coin.2012.28.issue-3/issuetoc) (Extended version of Chen et al. EMNLP2009)
+
+==License==
+As the original CNP is licensed under [http://www.eclipse.org/legal/cpl-v10.html Common Public License Version 1.0 (or later)], we also distribute our materials (i.e., modification and additions to the original) under the same license. Various trained models are available for download trained from different text resources, but may require further licenses.
+
+OK. The End. 
+

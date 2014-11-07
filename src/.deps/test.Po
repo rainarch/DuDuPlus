@@ -1,0 +1,3 @@
+src/test.o: src/test.cc src/test.h
+
+src/test.h:

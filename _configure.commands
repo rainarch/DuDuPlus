@@ -1,0 +1,20 @@
+Now we need to generate the required output files from the two input files configure.in and Makefile.am. First we need to collect all the macro invocations in configure.in that Autoconf will need to build the configure script. This is done with the following command:
+
+$ aclocal
+
+This generates the file aclocal.m4 and adds it to the current directory.
+
+Next, run autoconf:
+
+$ autoconf
+
+After running autoconf you will find the configure script in the current directory. It's important to run aclocal first because automake relies on the contents on configure.in and aclocal.m4.
+
+There are a few files that the GNU standard says must be present in the top-level directory, and if not found Automake will report an error.  Enter the following command to create these files:
+
+##$ touch AUTHORS NEWS README ChangeLog
+
+Now we can run automake to create Makefile.in. The --add-missing argument copies some boilerplate files from your Automake installation into the current directory.
+
+$ automake --add-missing
+
