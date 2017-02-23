@@ -1,5 +1,6 @@
-Duduplus @github
-Here is a bak copy of DuDuplus. Please check http://code.google.com/p/duduplus/ 
+Duduplus @github  Created by [chenwenliang at gmail]
+Here is an active copy of DuDuplus. 
+The old site of DuDupus is at http://code.google.com/p/duduplus/ 
 The release package can also be obtained from http://sourceforge.net/projects/duduplus/.
 
 =DuDuPlus=
@@ -133,5 +134,6 @@ If you would like to acknowledge this tool, please cite one of the following pap
 ==License==
 As the original CNP is licensed under [http://www.eclipse.org/legal/cpl-v10.html Common Public License Version 1.0 (or later)], we also distribute our materials (i.e., modification and additions to the original) under the same license. Various trained models are available for download trained from different text resources, but may require further licenses.
 
+For further help, please send an email to [chenwenliang at gmail].
 OK. The End. 
 
